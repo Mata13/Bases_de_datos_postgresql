@@ -146,3 +146,114 @@ SELECT * FROM modulo_victimizacion
 -- La misma respuesta obtendríamos el mismo resultado de la línea anterior
 SELECT * FROM modulo_victimizacion
 	WHERE perdida != 4500;
+
+------------- El comando limit -------------
+
+-- Muestra toda la tabla
+SELECT * FROM modulo_victimizacion; 
+
+-- Sirve para mostrar los primeros 3 rows y qué tipo de datos tienes, especialmente si tienes una tabla muy grande
+SELECT * FROM modulo_victimizacion limit 3;
+
+-- Muestra la tabla ordenada por la perdida de forma descendente  pero solo muestra 3 perdidas
+SELECT * FROM modulo_victimizacion ORDER BY perdida desc limit 3;
+
+-- Muestra la tabla por entidad, tipo_delito ordenada por perdida y que se muestren solo 3
+SELECT entidad, tipo_delito FROM modulo_victimizacion order by perdida desc limit 3;
+
+-- Muestra la tabla por entidad, tipo_delito, perdida ordenada por perdida y que se muestren solo 3
+SELECT entidad, tipo_delito, perdida FROM modulo_victimizacion order by perdida desc limit 3;
+
+------------- El comando offset -------------
+
+-- Muestra la tabla desde el renglón index = 2 en adelante
+SELECT * FROM modulo_victimizacion OFFSET 2;
+
+------------- El comando between -------------
+
+-- Muestra los registros en un intervalo cerrado, toma a los valores extremos
+SELECT * FROM modulo_victimizacion WHERE perdida BETWEEN 1000 AND 3000;
+
+-- Esto es lo mismo que la línea de código anterior
+SELECT * FROM modulo_victimizacion WHERE perdida >= 1000 AND perdida <= 3000;
+
+------------- LIKE e ILIKE -------------
+
+------------- LIKE es para coincidencia exacta y es sencible a las mayúsculas
+
+-- Supongamos que queremos los registros donde el nombre empieza con 'Luis%', % indica que después de esa palabra puede
+-- seguir cualquier otra cosa
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE 'Luis%'; -- inicia con Luis
+
+-- Supongamos que queremos los registros donde el nombre empieza con 'Luis', sin otra cosa o dato
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE 'Luis'; 
+
+-- Con % indica que antes de '%hsdiw' puede ir cualquier otra cosa pero debe terminar con 'iz'
+SELECT * FROM modulo_victimizacion WHERE apellido LIKE '%iz'; -- termina con iz
+
+-- Se quiere mostrar los registros que empiecen con cualquier cosa, que tengan 'ui', y que termine con cualquier cosa
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE '%ui%'; -- contiene ui
+
+-- Muestra los registros que tengan una 'u' previa con una 's' 
+-- y que pueden no comenzar con 'u' o terminar con's'entonces escribimos
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE '%u%s%';
+
+-- Esto devuelve a Luis y a Luisa
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE 'Luis%';
+
+-- Si buscamos registros con el nombre 'luis' no debe salir nada pues no hay registro con la minúscula 
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE 'luis';
+
+------------- ILIKE no distingue entre mayúsculas y minúsculas 
+SELECT * FROM modulo_victimizacion WHERE nombre ILIKE 'luis%';
+
+------------- El comodín _ -------------
+
+-- Quiero ver registros que empiecen con 'Lu__' y que le sigan dos letras o caracteres
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE 'Lu__';
+
+-- Comienza en L, puedes meter cualquier cosa y que después de la L tenga una letra
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE 'L%_';
+
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE 'L%';
+
+SELECT * FROM modulo_victimizacion WHERE nombre LIKE 'L_';
+
+-- Insertamos valores con la pura 'L' y los demás con valores nulos
+INSERT INTO modulo_victimizacion(nombre) values ('L');
+
+-- Insertamos valores con la pura 'Luis.' y los demás con valores nulos
+INSERT INTO modulo_victimizacion(nombre) values ('Luis.');
+
+-- Muestra la tabla
+SELECT * FROM modulo_victimizacion;
+
+-- Combinando LIKE con NOT para ver patrones en textos
+SELECT * FROM modulo_victimizacion WHERE nombre NOT LIKE 'Lu__';
+
+------------- Vaciado de una tabla -------------
+
+-- Esto no elimina la tabla, sino que elimina los datos que contenía. 
+-- Una vez que lo aplicas ya no se puede recuperar!!
+-- Puedes hacer modificaciones para que algunos usuarios no tengan permisos para hacer un DELETE
+DELETE FROM modulo_victimizacion ;
+
+-- Puedes eliminar a 'Luis%'
+DELETE FROM modulo_victimizacion WHERE nombre LIKE 'Luis.';
+
+-- Muestra la tabla completa
+SELECT * FROM modulo_victimizacion;
+
+
+------------- El comando UPDATE -------------
+
+-- Los cambios realizados con update ya no se pueden deshacer!!
+
+-- Actualiza la entidad a '32' para el nombre 'Luis'
+UPDATE modulo_victimizacion SET entidad = '32' WHERE nombre = 'Luis';
+
+-- Muestra la tabla completa
+SELECT * FROM modulo_victimizacion;
+
+-- Actualiza los datos de perdida a 100000
+UPDATE modulo_victimizacion SET perdida = 100000
