@@ -1,4 +1,4 @@
--- Creamos una tabla en la base de datos mi_primer_base, con 2 columnas: 
+-- Creamos una tabla en la base de datos mi_primer_base, con 2 columnas:
 -- la columna1 son datos de tipo texto de a lo más 20 caracteres incluyendo el espacio
 -- la columna2 sus elementos van a ser números enteros
 create table mi_primer_tabla(columna1 varchar(20), columna2 int);
@@ -13,7 +13,7 @@ select * from mi_primer_tabla;
 -- Insertamos una nueva fila
 insert into mi_primer_tabla values ('Duquesa Oliveira', 5);
 
--- Muestra la tabla 
+-- Muestra la tabla
 select * from mi_primer_tabla;
 
 -- Elimina la tabla creada
@@ -43,11 +43,11 @@ insert into mi_segunda_tabla(matricula, apellido, calif) values ('6278162', Null
 select length(matricula) from mi_segunda_tabla;
 
 ------------- Pasando al ejemplo de la documentación -------------
-CREATE TABLE modulo_victimizacion(entidad varchar(2), 
-	viv varchar(5), 
-	hogar varchar(5), 
-	upm varchar(5), 
-	renglon varchar(20), 
+CREATE TABLE modulo_victimizacion(entidad varchar(2),
+	viv varchar(5),
+	hogar varchar(5),
+	upm varchar(5),
+	renglon varchar(20),
 	tipo_delito int,
 	num_delito int,
 	nombre varchar(50),
@@ -55,7 +55,7 @@ CREATE TABLE modulo_victimizacion(entidad varchar(2),
 	perdida int);
 
 -- Llenado de datos, si tienen el mismo orden que el CREATE TABLE ya no lo escribimos para ahorrarnos espacio
-INSERT INTO modulo_victimizacion 
+INSERT INTO modulo_victimizacion
 	VALUES ('01', '15', '03', '15', '10', 3, 1, 'Luis', 'Miranda', 2000),
 	('01', '15', '03', '15', '10', 3, 2, 'Luis', 'Miranda', 3000),
 	('02', '20', '13', '10', '03', 4, 1, 'Oscar', 'Ruiz', 1000),

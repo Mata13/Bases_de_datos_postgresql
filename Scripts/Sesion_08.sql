@@ -14,11 +14,11 @@ SELECT ROUND(32.3861, 2);
 -- piso = FLOOR
 
 -- La función techo redondea al entero que está a la derecha
--- techo = CEIL 
+-- techo = CEIL
 
 -- Obtenemos la función piso y techo en la misma línea de código
-SELECT decimales, 
-	FLOOR(decimales) AS piso, 
+SELECT decimales,
+	FLOOR(decimales) AS piso,
 	CEILING(decimales) AS techo
 	FROM modulo_victimizacion;
 
@@ -40,7 +40,7 @@ SELECT RANDOM();
 
 -- El problema de seleccionar un número aleatorio entre 1, 2, 3, 4, 5, 6.
 -- Para resolverlo usamos el Teorema del notebook de 02_Funciones_predefinidas,
--- donde se utiliza la función piso, 
+-- donde se utiliza la función piso,
 -- de la siguiente manera
 SELECT FLOOR(6 * RANDOM() + 2);
 
@@ -58,8 +58,8 @@ SELECT POWER(5, 2);
 SELECT * FROM modulo_victimizacion;
 
 -- Podemos aplicarlo a columnas numéricas
-SELECT tipo_delito, num_delito, 
-	POWER(tipo_delito, num_delito) AS ejemplo_potencia 
+SELECT tipo_delito, num_delito,
+	POWER(tipo_delito, num_delito) AS ejemplo_potencia
 	FROM modulo_victimizacion;
 
 
@@ -67,7 +67,7 @@ SELECT tipo_delito, num_delito,
 SELECT MOD(1996, 28);
 
 -- También puedes aplicar los módulos a columnas
-SELECT perdida, tipo_delito, 
+SELECT perdida, tipo_delito,
 	MOD(perdida, tipo_delito) AS modulo
 FROM modulo_victimizacion;
 
@@ -90,45 +90,45 @@ SELECT SQRT(perdida) FROM modulo_victimizacion;
 SELECT * FROM modulo_victimizacion;
 
 -- Función UPPER para convertir todo a mayúsculas
-SELECT nombre, 
-	UPPER(nombre) AS mayusculas 
+SELECT nombre,
+	UPPER(nombre) AS mayusculas
 FROM modulo_victimizacion;
 
 -- Función LOWER para convertir todo a minúsculas
-SELECT nombre, 
-	LOWER(nombre) AS minusculas 
+SELECT nombre,
+	LOWER(nombre) AS minusculas
 FROM modulo_victimizacion;
 
 -- Uniendo ambas funciones para mostrar los resultados
-SELECT nombre, 
-	UPPER(nombre) AS mayusculas, 
-	LOWER(nombre) AS minusculas 
+SELECT nombre,
+	UPPER(nombre) AS mayusculas,
+	LOWER(nombre) AS minusculas
 FROM modulo_victimizacion;
 
 
 -- Función CONCAT para unir textos
-SELECT nombre, apellido, 
-	CONCAT(nombre, apellido) AS nombre_completo 
+SELECT nombre, apellido,
+	CONCAT(nombre, apellido) AS nombre_completo
 FROM modulo_victimizacion;
 
 -- Función CONCAT para unir textos
-SELECT nombre, apellido, 
+SELECT nombre, apellido,
 	CONCAT(nombre, ' ', apellido) AS nombre_completo_espacio,
 	CONCAT(nombre, '_', apellido) AS nombre_completo_guion
 FROM modulo_victimizacion;
 
 -- Función CONCAT para unir textos
-SELECT nombre, apellido, 
+SELECT nombre, apellido,
 	CONCAT(nombre, ' ', perdida) AS nombre_completo_espacio,
 	CONCAT(nombre, '_', apellido) AS nombre_completo_guion
 FROM modulo_victimizacion;
 
 -- Función CONCAT para unir textos
-SELECT CONCAT('La persona ', nombre, ' ', apellido, ' ha tenido una pérdida de $', perdida) AS frase 
+SELECT CONCAT('La persona ', nombre, ' ', apellido, ' ha tenido una pérdida de $', perdida) AS frase
 	FROM modulo_victimizacion;
 
 -- Función length para obtener la longitud o cantidad de caracteres
--- Función CONCAT para unir textos 
+-- Función CONCAT para unir textos
 SELECT CONCAT('La persona ', nombre, ' ', apellido, ' ha tenido una pérdida de $', perdida) AS frase,
 	LENGTH(CONCAT('La persona ', nombre, ' ', apellido, ' ha tenido una pérdida de $', perdida)) AS longitud_frase
 FROM modulo_victimizacion;
@@ -152,19 +152,19 @@ SELECT TRIM('     hola    ');
 
 -- TRIM corta los espacios
 SELECT '             hola   ',
-	LENGTH('             hola   '), 
+	LENGTH('             hola   '),
 	TRIM('             hola   '),
 	LENGTH(TRIM('             hola   '));
 
 -- LTRIM quita los espacios a la izquierda
 SELECT '             hola   ',
-	LENGTH('             hola   '), 
+	LENGTH('             hola   '),
 	LTRIM('             hola   '),
 	LENGTH(LTRIM('             hola   '));
 
 -- RTRIM quita los espacios a la derecha
 SELECT '             hola   ',
-	LENGTH('             hola   '), 
+	LENGTH('             hola   '),
 	RTRIM('             hola   '),
 	LENGTH(RTRIM('             hola   '));
 
@@ -194,7 +194,7 @@ SELECT * FROM datos;
 -- Example: Agregar una columna llamada 'Identificador' que sea concatenar
 -- cod_pais, cod_ent, tipo_delito
 
--- se puede usar text en vez de char si no sabes la longitud de los caracteres 
+-- se puede usar text en vez de char si no sabes la longitud de los caracteres
 -- STORED es para que no se quede solo en una vista o muestra
 
 ALTER TABLE datos ADD COLUMN Identificador VARCHAR(10);
@@ -236,7 +236,7 @@ SELECT * FROM datos;
 
 
 -- Cambiar el orden de las columnas se puede hacer de la siguiente manera
--- no se cambia la estructura de la tabla solo es una vista 
+-- no se cambia la estructura de la tabla solo es una vista
 -- o una tabla virtual
 SELECT id, nombre FROM datos;
 
@@ -355,7 +355,7 @@ SELECT continente,
 	MIN(cantidad) AS minimo
 FROM info_paises GROUP BY continente;
 
--- Podemos hacerlo ahora por continente y país 
+-- Podemos hacerlo ahora por continente y país
 -- Muestra la información agrupada por grupos
 SELECT continente, pais,
 	SUM(cantidad) AS suma,
@@ -366,7 +366,7 @@ FROM info_paises GROUP BY continente, pais;
 
 -- Conteo, muestra los países que hay en cada continente
 SELECT continente,
-	COUNT(*) 
+	COUNT(*)
 FROM info_paises GROUP BY continente;
 
 -- Otra muestra de la información
@@ -418,11 +418,11 @@ SELECT pais, continente, SUM(cantidad) from info_paises GROUP BY pais, continent
 
 
 -- La cláusula HAVING es de uso semejante al WHERE
--- se ocupa únicamente en el caso en que tengamos GROUP BY 
+-- se ocupa únicamente en el caso en que tengamos GROUP BY
 -- nos devuelve aquellos resultados que cumplen con
--- ciertas condición lógica 
+-- ciertas condición lógica
 
--- Muestra el resultado usando HAVING y una condición lógica 
+-- Muestra el resultado usando HAVING y una condición lógica
 -- promedio > 760
 SELECT continente,
 	SUM(cantidad) AS suma,
@@ -435,7 +435,7 @@ GROUP BY continente
 HAVING AVG(cantidad) > 760;
 
 
--- Muestra el resultado usando HAVING y una condición lógica 
+-- Muestra el resultado usando HAVING y una condición lógica
 -- promedio > 760
 -- ordenado por suma
 SELECT continente,
@@ -452,7 +452,7 @@ ORDER BY suma;
 -- Muestra la tabla original
 SELECT * FROM info_paises;
 
--- Muestra el resultado usando WHERE y una condición lógica 
+-- Muestra el resultado usando WHERE y una condición lógica
 SELECT * FROM info_paises WHERE cantidad > 729;
 
 
@@ -476,8 +476,8 @@ CREATE TABLE modulo_victimizacion(
 );
 
 -- Llenamos la tabla usando INSERT
-INSERT INTO modulo_victimizacion 
-	VALUES 
+INSERT INTO modulo_victimizacion
+	VALUES
 	('01', '15', '03', '15', '10', 3, 1, 'Luis', 'Miranda', 2000),
 	('01', '15', '03', '15', '10', 3, 2, 'Luis', 'Miranda', 3000),
 	('02', '20', '13', '10', '03', 4, 1, 'Oscar', 'Ruiz', 1000),
@@ -500,7 +500,7 @@ SELECT * FROM modulo_victimizacion;
 
 -- Contar el número de víctima por tipo de delito y mostrar solo aquellos
 -- con más de una víctima
-SELECT tipo_delito, COUNT(*) 
+SELECT tipo_delito, COUNT(*)
 FROM modulo_victimizacion
 GROUP BY tipo_delito
 HAVING COUNT(*) > 1;
@@ -508,7 +508,7 @@ HAVING COUNT(*) > 1;
 -- Calcular el promedio de pérdidas por entidad
 -- y mostrar solo aquellas entidades con un promedio de pérdida
 -- superior a 2000
-SELECT entidad, AVG(perdida) AS promedio_perdida 
+SELECT entidad, AVG(perdida) AS promedio_perdida
 FROM modulo_victimizacion
 GROUP BY entidad
 HAVING AVG(perdida) > 2000;
@@ -529,7 +529,7 @@ FROM modulo_victimizacion
 GROUP BY nombre, apellido;
 
 -- Mostrar el máximo de pérdida por entidad y UPM
--- ordenado de mayor a menor 
+-- ordenado de mayor a menor
 SELECT entidad, upm, MAX(perdida)
 FROM modulo_victimizacion
 GROUP BY entidad, upm -- upm es como la colonia o fraccionamiento

@@ -1,4 +1,4 @@
--- Creamos una tabla en la base de datos mi_primer_base, con 2 columnas: 
+-- Creamos una tabla en la base de datos mi_primer_base, con 2 columnas:
 -- la columna1 son datos de tipo texto de a lo más 20 caracteres incluyendo el espacio
 -- la columna2 sus elementos van a ser números enteros
 create table mi_primer_tabla(columna1 varchar(20), columna2 int);
@@ -13,7 +13,7 @@ select * from mi_primer_tabla;
 -- Insertamos una nueva fila
 insert into mi_primer_tabla values ('Duquesa Oliveira', 5);
 
--- Muestra la tabla 
+-- Muestra la tabla
 select * from mi_primer_tabla;
 
 -- Elimina la tabla creada

@@ -36,13 +36,13 @@ SELECT * FROM modulo_victimizacion;
 -- Con el STORED si estás modificando la tabla original
 ALTER TABLE modulo_victimizacion ADD COLUMN ejemplo int GENERATED ALWAYS AS (tipo_delito + num_delito) STORED;
 
--- Muestra la tabla 
+-- Muestra la tabla
 SELECT * FROM modulo_victimizacion;
 
 -- Añadir una columna calculada, que se construye a partir de las columnas que conoces
 ALTER TABLE modulo_victimizacion ADD COLUMN ejemplo_2 int GENERATED ALWAYS AS (tipo_delito * num_delito) STORED;
 
--- Muestra la tabla 
+-- Muestra la tabla
 SELECT * FROM modulo_victimizacion;
 
 -- Añadir una columna calculada, que se construye a partir de las columnas que conoces
@@ -61,11 +61,11 @@ SELECT * FROM modulo_victimizacion;
 DROP TABLE modulo_victimizacion;
 
 -- Volvemos a crear la tabla modulo_victimizacion desde cero
-CREATE TABLE modulo_victimizacion(entidad varchar(2), 
-	viv varchar(5), 
-	hogar varchar(5), 
-	upm varchar(5), 
-	renglon varchar(20), 
+CREATE TABLE modulo_victimizacion(entidad varchar(2),
+	viv varchar(5),
+	hogar varchar(5),
+	upm varchar(5),
+	renglon varchar(20),
 	tipo_delito int,
 	num_delito int,
 	nombre varchar(50),
@@ -73,7 +73,7 @@ CREATE TABLE modulo_victimizacion(entidad varchar(2),
 	perdida int);
 
 -- Llenado de datos, si tienen el mismo orden que el CREATE TABLE ya no lo escribimos para ahorrarnos espacio
-INSERT INTO modulo_victimizacion 
+INSERT INTO modulo_victimizacion
 	VALUES ('01', '15', '03', '15', '10', 3, 1, 'Luis', 'Miranda', 2000),
 	('01', '15', '03', '15', '10', 3, 2, 'Luis', 'Miranda', 3000),
 	('02', '20', '13', '10', '03', 4, 1, 'Oscar', 'Ruiz', 1000),
@@ -81,7 +81,7 @@ INSERT INTO modulo_victimizacion
 	('32', '12', '11', '02', '04', 2, 1, 'Luisa', 'Ortiz', 300),
 	('32', '12', '11', '02', '04', 3, 1, 'Luisa', 'Ortiz', 500);
 
--- Muestra la tabla 
+-- Muestra la tabla
 SELECT * FROM modulo_victimizacion;
 
 
@@ -118,9 +118,9 @@ SELECT COUNT(*) FROM modulo_victimizacion WHERE nombre LIKE 'Luis%';
 -- Usando lo siguiente veremos lo de los alias, hace un cálculo y le pone un nombre
 -- Solo muestra información, no ocupa lugar en la compu
 -- solamente es una vista
-SELECT MIN(perdida) AS minima_perdida, 
-	MAX(perdida) AS maxima_perdida, 
-	SUM(perdida) AS perdida_total, 
+SELECT MIN(perdida) AS minima_perdida,
+	MAX(perdida) AS maxima_perdida,
+	SUM(perdida) AS perdida_total,
 	AVG(perdida) AS perdida_promedio
 FROM modulo_victimizacion;
 
@@ -152,8 +152,8 @@ SELECT ROUND(decimales, 1) FROM modulo_victimizacion;
 -- Redondea la columna decimales
 SELECT ROUND(decimales, 1) FROM modulo_victimizacion;
 
--- Muestra toda la tabla pero además muestra la columna de decimales redondeada a un dígito 
--- con el nombre 'col_redondeada' 
+-- Muestra toda la tabla pero además muestra la columna de decimales redondeada a un dígito
+-- con el nombre 'col_redondeada'
 SELECT *, ROUND(decimales, 1) AS col_redondeada FROM modulo_victimizacion;
 
 -- Puedes especificar el orden de las columnas usando SELECT
@@ -175,11 +175,11 @@ SELECT ROUND(32.3861, 2);
 -- piso = FLOOR
 
 -- La función techo redondea al entero que está a la derecha
--- techo = CEIL 
+-- techo = CEIL
 
 -- Obtenemos la función piso y techo en la misma línea de código
-SELECT decimales, 
-	FLOOR(decimales) AS piso, 
+SELECT decimales,
+	FLOOR(decimales) AS piso,
 	CEILING(decimales) AS techo
 	FROM modulo_victimizacion;
 
@@ -201,7 +201,7 @@ SELECT RANDOM();
 
 -- El problema de seleccionar un número aleatorio entre 1, 2, 3, 4, 5, 6.
 -- Para resolverlo usamos el Teorema del notebook de 02_Funciones_predefinidas,
--- donde se utiliza la función piso, 
+-- donde se utiliza la función piso,
 -- de la siguiente manera
 SELECT FLOOR(6 * RANDOM() + 2);
 
@@ -219,8 +219,8 @@ SELECT POWER(5, 2);
 SELECT * FROM modulo_victimizacion;
 
 -- Podemos aplicarlo a columnas numéricas
-SELECT tipo_delito, num_delito, 
-	POWER(tipo_delito, num_delito) AS ejemplo_potencia 
+SELECT tipo_delito, num_delito,
+	POWER(tipo_delito, num_delito) AS ejemplo_potencia
 	FROM modulo_victimizacion;
 
 
@@ -228,7 +228,7 @@ SELECT tipo_delito, num_delito,
 SELECT MOD(1996, 28);
 
 -- También puedes aplicar los módulos a columnas
-SELECT perdida, tipo_delito, 
+SELECT perdida, tipo_delito,
 	MOD(perdida, tipo_delito) AS modulo
 FROM modulo_victimizacion;
 
@@ -251,45 +251,45 @@ SELECT SQRT(perdida) FROM modulo_victimizacion;
 SELECT * FROM modulo_victimizacion;
 
 -- Función UPPER para convertir todo a mayúsculas
-SELECT nombre, 
-	UPPER(nombre) AS mayusculas 
+SELECT nombre,
+	UPPER(nombre) AS mayusculas
 FROM modulo_victimizacion;
 
 -- Función LOWER para convertir todo a minúsculas
-SELECT nombre, 
-	LOWER(nombre) AS minusculas 
+SELECT nombre,
+	LOWER(nombre) AS minusculas
 FROM modulo_victimizacion;
 
 -- Uniendo ambas funciones para mostrar los resultados
-SELECT nombre, 
-	UPPER(nombre) AS mayusculas, 
-	LOWER(nombre) AS minusculas 
+SELECT nombre,
+	UPPER(nombre) AS mayusculas,
+	LOWER(nombre) AS minusculas
 FROM modulo_victimizacion;
 
 
 -- Función CONCAT para unir textos
-SELECT nombre, apellido, 
-	CONCAT(nombre, apellido) AS nombre_completo 
+SELECT nombre, apellido,
+	CONCAT(nombre, apellido) AS nombre_completo
 FROM modulo_victimizacion;
 
 -- Función CONCAT para unir textos
-SELECT nombre, apellido, 
+SELECT nombre, apellido,
 	CONCAT(nombre, ' ', apellido) AS nombre_completo_espacio,
 	CONCAT(nombre, '_', apellido) AS nombre_completo_guion
 FROM modulo_victimizacion;
 
 -- Función CONCAT para unir textos
-SELECT nombre, apellido, 
+SELECT nombre, apellido,
 	CONCAT(nombre, ' ', perdida) AS nombre_completo_espacio,
 	CONCAT(nombre, '_', apellido) AS nombre_completo_guion
 FROM modulo_victimizacion;
 
 -- Función CONCAT para unir textos
-SELECT CONCAT('La persona ', nombre, ' ', apellido, ' ha tenido una pérdida de $', perdida) AS frase 
+SELECT CONCAT('La persona ', nombre, ' ', apellido, ' ha tenido una pérdida de $', perdida) AS frase
 	FROM modulo_victimizacion;
 
 -- Función length para obtener la longitud o cantidad de caracteres
--- Función CONCAT para unir textos 
+-- Función CONCAT para unir textos
 SELECT CONCAT('La persona ', nombre, ' ', apellido, ' ha tenido una pérdida de $', perdida) AS frase,
 	LENGTH(CONCAT('La persona ', nombre, ' ', apellido, ' ha tenido una pérdida de $', perdida)) AS longitud_frase
 FROM modulo_victimizacion;

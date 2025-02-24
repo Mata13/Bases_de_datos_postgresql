@@ -1,175 +1,4 @@
 -------------------------------------
-------------- Sesión 07 -------------
--------------------------------------
-
-
--- Funciones TRIM, LTRIM, RTRIM --> sirven para eliminar espacios, TRIM en inglés es ajustar, recortar
-
--- TRIM corta los espacios
-SELECT TRIM('     hola    ');
-
--- TRIM corta los espacios
-SELECT '             hola   ',
-	LENGTH('             hola   '),
-	TRIM('             hola   '),
-	LENGTH(TRIM('             hola   '));
-
--- LTRIM quita los espacios a la izquierda
-SELECT '             hola   ',
-	LENGTH('             hola   '),
-	LTRIM('             hola   '),
-	LENGTH(LTRIM('             hola   '));
-
--- RTRIM quita los espacios a la derecha
-SELECT '             hola   ',
-	LENGTH('             hola   '),
-	RTRIM('             hola   '),
-	LENGTH(RTRIM('             hola   '));
-
-
--- Función SUBSTR nos permite eliminar cadenas de texto
--- toma tres argumentos: 1) un texto; 2) a partir de donde vas a recortar
--- 3) es opcional, cuántos lugares vas a recortar
-
-SELECT SUBSTR('hola a todos', 1, 3);
-
--- En qué posición inicial te paras y cuántos caracteres se debe traer
-SELECT SUBSTR('hola a todos', 4, 3);
-
-SELECT SUBSTR('hola a todos', 8, 4);
-
--- Creamos una tabla para mostrar la utilidad de SUBTR
-CREATE TABLE datos(cod_pais char(3), cod_ent char(2), tipo_delito char(2), nombre varchar(50));
-
--- Insertamos los datos
-INSERT INTO datos VALUES ('MEX', '03', '01', 'Luis'),
-	('MEX', '05', '04', 'Ana'),
-	('MEX', '09', '02', 'Francisco');
-
--- Muestra la tabla 'datos'
-SELECT * FROM datos;
-
--- Example: Agregar una columna llamada 'Identificador' que sea concatenar
--- cod_pais, cod_ent, tipo_delito
-
--- se puede usar text en vez de char si no sabes la longitud de los caracteres
--- STORED es para que no se quede solo en una vista o muestra
-
-ALTER TABLE datos ADD COLUMN Identificador VARCHAR(10);
-UPDATE datos SET identificador = CONCAT(cod_pais, cod_ent, tipo_delito);
-
--- Muestra la tabla con la columna identificador
-SELECT * FROM datos;
-
--- Eliminar todas excepto las columnas nombre e identificador
-ALTER TABLE datos DROP COLUMN cod_pais, DROP COLUMN cod_ent, DROP COLUMN tipo_delito;
-
--- Muestra la tabla
-SELECT * FROM datos;
-
--- Aplicamos el SUBSTR y CONCAT juntos para ver lo que nos permite hacer
--- de esta manera obtenemos las claves de entidad y tipo
-SELECT SUBSTR(identificador, 1, 3) AS pais,
-	SUBSTR(identificador, 4, 2) AS entidad,
-	SUBSTR(identificador, 6, 2) AS tipo
-FROM datos;
-
-
--- Función POSITION permite hacer búsquedas (in string)
--- busca el texto 1 en el texto 2
-SELECT POSITION('a t' IN 'hola a todos');
-
--- Buscamos 'Mex' en la columna de identificador
-SELECT POSITION('MEX' IN identificador) FROM datos;
-
--- Buscamos 'Mex' en la columna de identificador mostrando la tabla
-SELECT *, POSITION('MEX' IN identificador) FROM datos;
-
-
--- Cambiar el nombre de una columna
-ALTER TABLE datos RENAME COLUMN identificador TO id;
-
--- Mostramos el resultado
-SELECT * FROM datos;
-
-
--- Cambiar el orden de las columnas se puede hacer de la siguiente manera
--- no se cambia la estructura de la tabla solo es una vista
--- o una tabla virtual
-SELECT id, nombre FROM datos;
-
-
--- Función LPAD and RPAD
-
--- Agrega 26 estrellas a la izquierda del texto para que sean de 30 caracteres
-SELECT LPAD('hola', 30, '*');
-
--- Agrega 26 estrellas a la derecha del texto para que sean de 30 caracteres
-SELECT RPAD('hola', 30, '*');
-
--- Puede cortar el string para que cumpla con la longitud del string
-SELECT RPAD('hola', 2, '*');
-
-SELECT RPAD('hola', 30, 'SciData');
-
--- A la columna de nombre le va agregar _ para que llegue a ser de tamaño 40
-SELECT *, RPAD(nombre, 40, '_') AS nombre_40 FROM datos;
-
--- Muestra toda la tabla
-SELECT * FROM datos;
-
--- Añadimos una nueva columna donde ya no es tan sencillo obtenel el nombre
-ALTER TABLE datos ADD COLUMN id_nombre_2 text;
-UPDATE datos SET id_nombre_2 = CONCAT(RPAD(nombre, 40, ' '), id);
-
--- Extraemos los nombres con los 40 espacios
-SELECT SUBSTR(id_nombre_2, 1, 40) FROM datos;
-
--- Con un RTRIM eliminamos los espacios a la derecha del nombre para recuperar el nombre
-SELECT id_nombre_2, RTRIM(SUBSTR(id_nombre_2, 1, 40)) as Nombre,
-	SUBSTR(id_nombre_2, 41, 3) as Pais,
-	SUBSTR(id_nombre_2, 44, 2) as Entidad,
-	SUBSTR(id_nombre_2, 46, 2) as tipo
-FROM datos;
-
--- Muestra toda la tabla
-SELECT * FROM datos;
-
--- Añadimos una nueva columna donde ya no es tan sencillo obtenel el nombre
-ALTER TABLE datos ADD COLUMN id_nombre_3 text;
-UPDATE datos SET id_nombre_3 = CONCAT(RPAD(nombre, 40, ' '), id);
-
--- Con un RTRIM eliminamos los espacios a la derecha del nombre para recuperar el nombre
--- junto con la clave de entidad, pais, tipo
-SELECT id_nombre_3, RTRIM(SUBSTR(id_nombre_3, 1, 40)) as Nombre,
-	SUBSTR(id_nombre_3, 41, 3) as Pais,
-	SUBSTR(id_nombre_3, 44, 2) as Entidad,
-	SUBSTR(id_nombre_3, 46, 2) as tipo
-FROM datos;
-
-
--- Función REVERSE sirve para invertir un texto
-SELECT REVERSE('Hola crayola');
-
-
--- Función REPEAT sirve para repetir una cadena de texto las veces indicada
-SELECT REPEAT('Hola crayola', 3);
-
-
--- Función REPLACE nos permite reemplazar en cadenas
-SELECT REPLACE('Hola crayola a todos', 'Hola', 'Hola mundo');
-
--- Función REPLACE nos permite reemplazar en cadenas
-SELECT REPLACE('Hola a todos', 'Hola', 'SciData');
-
--- Muestra la tabla
-SELECT * FROM datos;
-
--- Función REPLACE nos permite reemplazar en cadenas en columnas
-SELECT REPLACE(id, 'MEX', 'mex') FROM datos;
-
-
--------------------------------------
 ------------- Sesión 08 -------------
 -------------------------------------
 
@@ -536,3 +365,72 @@ SELECT * FROM ESTADISTICAS_ENTIDADES;
 -- Con lo anterior aprendimos a leer una tabla externa
 -- usando POSTGRESQL y con ello hacer diferentes consultas
 -- con esos datos
+
+
+-------------------------------------
+------------- Sesión 10 -------------
+-------------------------------------
+
+-- En esta Sesión vamos a terminar de trabajar con la tabla de sismos
+
+-- Muestra la tabla de sismos
+SELECT * FROM sismos;
+
+SELECT MAX(year_s) FROM sismos;
+
+-- 12. Calcula la magnitud mínima, promedio, y máxima por entidad durante los serán últimos 10 años
+SELECT RIGHT(municipio, 4) AS entidad,
+	MIN(magnitud) AS min_magnitud,
+	AVG(magnitud) AS prom_magnitud,
+	MAX(magnitud) AS max_magnitud
+FROM sismos
+WHERE year_s >= 2012
+GROUP BY entidad;
+
+-- 13. Guardar la consulta anterior como una tabla nueva
+CREATE TABLE ESTADISTICAS_SISMOS_ENTIDADES AS
+SELECT RIGHT(municipio, 4) AS entidad,
+	MIN(magnitud) AS min_magnitud,
+	AVG(magnitud) AS prom_magnitud,
+	MAX(magnitud) AS max_magnitud
+FROM sismos
+WHERE year_s >= 2012
+GROUP BY entidad;
+
+-- MUestra los cambios
+SELECT * FROM ESTADISTICAS_SISMOS_ENTIDADES ORDER BY prom_magnitud DESC;
+
+-- 14. Exportar la tabla creada en el ejercicio anterior ESTADISTICAS_SISMOS_ENTIDADES CSV
+-- como ESTADISTICAS_SISMOS_ENTIDADES existe como tabla dentro de pgAdmin4
+-- pero como tal no existe ese archivo dentro de la computadora
+-- para usarlo o enviarlo por correo, etc.
+SELECT * FROM ESTADISTICAS_SISMOS_ENTIDADES;
+
+-- Muestra el row de Oaxaca donde la magnitud fue de 7.4
+SELECT * FROM sismos WHERE magnitud = 7.4 AND municipio ILIKE '%, OAX' AND year_s >= 2010;
+
+-- Muestra el gran sismo que ocurrió en México en septiembre de 2017
+SELECT * FROM sismos WHERE magnitud = 8.2 AND year_s = 2017;
+
+-- Muestra el gran sismo que ocurrió en México en septiembre de 2017 -- otra forma
+SELECT * FROM sismos WHERE mes = 9 AND year_s = 2017 AND magnitud > 7;
+
+-- 14. Exportar la tabla creada en el ejercicio anterior ESTADISTICAS_SISMOS_ENTIDADES CSV
+-- como ESTADISTICAS_SISMOS_ENTIDADES existe como tabla dentro de pgAdmin4
+-- pero como tal no existe ese archivo dentro de la computadora
+-- para usarlo o enviarlo por correo, etc.
+
+SELECT * FROM ESTADISTICAS_SISMOS_ENTIDADES;
+
+-- Forma 1: Buscas la tabla que quieres guardar, click derecho,
+-- seleccionar IMPORT\EXPORT ---> direccion y nombre del archivo, activar HEADER
+-- OK y ya queda guardada
+
+-- Forma 2: usando código
+COPY estadisticas_sismos_entidades TO 'C:/Users/matma/Documents/Developer/Courses/Bases_de_datos_postgresql/Data/minitabla_2.csv' WITH CSV HEADER;
+-- Con lo anterior nos muestra un error por PERMISSION DENIED
+
+-- Con lo anterior aprendimos a leer una tabla externa
+-- usando POSTGRESQL y con ello hacer diferentes consultas
+-- con esos datos y a exportar la tabla nueva en formato CSV
+-- usando la interfaz gráfica de pgAdmin
