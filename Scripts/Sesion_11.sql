@@ -210,7 +210,7 @@ COPY estadisticas_sismos_entidades TO 'C:/Users/matma/Documents/Developer/Course
 
 
 -------------------------------------
-------------- Sesión 10 -------------
+------------- Sesión 11 -------------
 -------------------------------------
 
 -- En esta Sesión veremos el álgebra relacional en SQL
@@ -237,7 +237,7 @@ INSERT INTO personas (llave_primaria_persona, entidad, upm, vivienda, hogar, ren
 SELECT * FROM personas;
 
 -- Ejemplo 1:
--- La operación 'selecciona de la Tabla Personas aquellos registros 
+-- La operación 'selecciona de la Tabla Personas aquellos registros
 -- cuya entidad es Baja California'
 SELECT * FROM personas WHERE entidad = '02';
 
@@ -282,7 +282,7 @@ SELECT entidad, upm FROM personas WHERE entidad = '02';
 -- En R: Personas %>% filter(entidad = '02') %>% select(entidad, upm)
 -- En Python: Personas >> filtrar_.entidad, _.upm)
 
--- Creamos una nueva tabla 
+-- Creamos una nueva tabla
 -- Crear la tabla camisas
 CREATE TABLE camisas (
     Id_camisa SERIAL PRIMARY KEY,
@@ -304,7 +304,7 @@ SELECT * FROM camisas;
 -----------------
 -----------------
 
--- Creamos una nueva tabla 
+-- Creamos una nueva tabla
 -- Crear la tabla pantalones
 CREATE TABLE pantalones (
     Id_pantalon SERIAL PRIMARY KEY,
@@ -322,11 +322,11 @@ SELECT * FROM pantalones;
 
 -- Ahora aplicamos el producto cartesiano en una nueva tabla
 CREATE TABLE camisas_pantalones AS
-SELECT camisas.camisa, 
-       camisas.precio AS Precio_camisa, 
-       pantalones.pantalon, 
-       pantalones.precio AS Precio_pantalon, 
-       camisas.precio + pantalones.precio AS Precio_final
+SELECT camisas.camisa,
+    camisas.precio AS Precio_camisa,
+    pantalones.pantalon,
+    pantalones.precio AS Precio_pantalon,
+    camisas.precio + pantalones.precio AS Precio_final
 FROM camisas, pantalones;
 
 -- Muestra la tabla camisas_pantalones
@@ -334,10 +334,10 @@ SELECT * FROM camisas_pantalones;
 
 -- Usando CONCAT para presentar la tabla de una forma con mejor estilizado
 SELECT CONCAT('Camisa de ', camisas_pantalones.camisa,
-              ' con pantalón de ', camisas_pantalones.pantalon) 
-                  AS combinacion, 
-       Precio_final
-FROM camisas_pantalones 
+            ' con pantalón de ', camisas_pantalones.pantalon)
+                AS combinacion,
+    Precio_final
+FROM camisas_pantalones
 ORDER BY Precio_final DESC;
 
 
