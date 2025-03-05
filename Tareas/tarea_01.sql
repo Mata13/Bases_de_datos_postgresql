@@ -3,18 +3,18 @@
 -------------------------------------
 
 -------------------------------------
--- De la tabla de calificaciones mostrar los nombres de las mujeres 
+-- De la tabla de calificaciones mostrar los nombres de las mujeres
 -- que tienen 15 años de edad y 10 en matemáticas
 -------------------------------------
 
 -- Creamos la tabla de calificaciones
-CREATE TABLE calificaciones(nombre varchar(20), 
+CREATE TABLE calificaciones(nombre varchar(20),
 	sexo varchar(10), edad int, matematicas int, spanish int, biologia int);
 
 -- Agregamos una fila de datos a la tabla
-INSERT INTO calificaciones 
-	VALUES('Luis', 'hombre', 15, 10, 8, 9), 
-	('Maria', 'mujer', 16, 7, 9, 10), 
+INSERT INTO calificaciones
+	VALUES('Luis', 'hombre', 15, 10, 8, 9),
+	('Maria', 'mujer', 16, 7, 9, 10),
 	('Jose', 'hombre', 15, 7, 6, 9),
 	('Ana', 'mujer', 15, 10, 8, 10),
 	('Gloria', 'mujer', 16, 9, 7, 8),
@@ -24,7 +24,7 @@ INSERT INTO calificaciones
 	('Raul', 'hombre', 16, 10, 10, 10),
 	('Hector', 'hombre', 15, 10, 8, 10),
 	('Patricia', 'mujer', 15, 10, 9, 10);
-	
+
 -- Se muestra la tabla
 SELECT * FROM calificaciones;
 
