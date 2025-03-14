@@ -9,13 +9,13 @@
 -- Vamos a crear una función a la cual le proporcionas dos números: precio y descuento.
 -- Lo que va a devolver es el precio final con el descuento proporcionado.
 
--- Por ejemplo, si un precio es de 420 y hay un 10% de descuento, entonces debe devolver 
+-- Por ejemplo, si un precio es de 420 y hay un 10% de descuento, entonces debe devolver
 -- como resultado 378
 
 -- Crea la función
 CREATE OR REPLACE FUNCTION calculate_discount(price numeric, discount_percent numeric)
 RETURNS numeric AS $$
-DECLARE 
+DECLARE
 	discounted_price numeric; -- variable auxiliar que se llama precio_descontado
 BEGIN -- cuerpo de la función
 	discounted_price := price - (price * discount_percent / 100);
@@ -35,14 +35,14 @@ SELECT * FROM calculate_discount(5000, 15);
 -- Creamos una función a la cual le proporcionas dos números enteros X and Y,
 -- y devuelva X + Y
 CREATE OR REPLACE FUNCTION sumar(X INT, Y INT)
-RETURNS INT AS 
+RETURNS INT AS
 $$
 DECLARE
 	Z INT; -- variable auxiliar
 BEGIN
 	Z = X + Y;
 	RETURN Z;
-END 
+END
 $$
 LANGUAGE 'plpgsql';
 
@@ -56,9 +56,9 @@ SELECT * FROM sumar(3, 5);
 -- a veces es mejor quitar el DECLARE y luego es mejor dejarlo.
 -- Modificamos la función reducir las línea de código
 CREATE OR REPLACE FUNCTION sumar_modificado(X INT, Y INT)
-RETURNS INT AS 
+RETURNS INT AS
 $$
-BEGIN 
+BEGIN
 	RETURN X + Y;
 END
 $$
@@ -76,13 +76,13 @@ SELECT * FROM sumar_modificado(122, 1);
 
 -- Creamos las siguientes tablas
 CREATE TABLE clientes(Cliente_ID INT, Nombre TEXT);
-CREATE TABLE libros(ISBN TEXT, Titulo TEXT, Autor TEXT, 
+CREATE TABLE libros(ISBN TEXT, Titulo TEXT, Autor TEXT,
 	Editorial TEXT, Año_de_publicacion INT, Genero TEXT,
 	Precio_de_venta NUMERIC);
-CREATE TABLE ventas(Venta_ID INT, ISBN TEXT, Fecha_de_venta DATE, 
+CREATE TABLE ventas(Venta_ID INT, ISBN TEXT, Fecha_de_venta DATE,
 	Cliente TEXT, Precio_de_venta NUMERIC);
 
--- Después de crear las tablar hay que ortorgar los permisos 
+-- Después de crear las tablar hay que ortorgar los permisos
 -- en la carpeta de libreria, click derecho, dar acceso a,
 -- usuarios específicos, everyone, compartir, listo
 
@@ -132,7 +132,7 @@ CREATE OR REPLACE FUNCTION agregar_libro(isbn text,
 	genero text,
 	precio_de_venta numeric
 	)
-RETURNS int AS 
+RETURNS int AS
 $$
 BEGIN
 	INSERT INTO libros VALUES (isbn, titulo, autor, editorial, año_de_publicacion, genero, precio_de_venta);
@@ -177,7 +177,7 @@ WHERE ventas.fecha_de_venta BETWEEN '2023-05-02' AND '2023-05-04';
 CREATE OR REPLACE FUNCTION libros_vendidos_rango(fecha_inicio date, fecha_final date)
 RETURNS TABLE (isbn text, titulo text, fecha_de_venta date, cliente text, precio_de_venta numeric) AS 
 $$
-BEGIN 
+BEGIN
 RETURN QUERY
 SELECT libros.isbn, libros.titulo, ventas.fecha_de_venta, ventas.cliente, ventas.precio_de_venta
 FROM libros
