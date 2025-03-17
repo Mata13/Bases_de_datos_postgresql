@@ -123,6 +123,7 @@ SELECT * FROM ventas
 SELECT * FROM libros;
 
 
+
 -- Vamos a crear una función para agregar un nuevo libro a la tabla libros
 CREATE OR REPLACE FUNCTION agregar_libro(isbn text,
 	titulo text,
@@ -154,14 +155,82 @@ SELECT * FROM agregar_libro('978-3-16-148410-0',
 SELECT * FROM libros;
 
 
+
 -- Crear una función para añadir una venta
+
+-- Muestra la tabla ventas
+CREATE OR REPLACE FUNCTION agregar_venta(Venta_ID INT, 
+	ISBN TEXT, 
+	Fecha_de_venta DATE,
+	Cliente TEXT, 
+	Precio_de_venta NUMERIC)
+RETURNS INT AS
+$$
+BEGIN 
+	INSERT INTO ventas VALUES (Venta_ID, ISBN, Fecha_de_venta, Cliente, Precio_de_venta);
+RETURN 0;
+END
+$$
+LANGUAGE 'plpgsql';
+
+-- Ejecutamos la función
+SELECT * FROM agregar_venta(6, '978-3-16-148410-0', '2023-05-07', 'Rocky Balboa', 15.99);
+
+SELECT * FROM ventas;
+
 
 
 -- Crear una función para calcular el total de ventas de un libro por ISBN
 
+-- Para ello, lo siguiente es lo que quiero que haga
+SELECT isbn, SUM(precio_de_venta) AS suma_de_venta FROM ventas GROUP BY isbn;
+
+-- Ahora falta encapsularlo en una función
+CREATE OR REPLACE FUNCTION suma_venta_isbn(isbn_param TEXT)
+RETURNS NUMERIC AS
+$$
+DECLARE 
+	suma_total_isbn NUMERIC;
+BEGIN 
+	SELECT SUM(precio_de_venta) INTO suma_total_isbn FROM ventas WHERE isbn = isbn_param;
+RETURN suma_total_isbn;
+END
+$$
+LANGUAGE 'plpgsql';
+
+DROP FUNCTION suma_venta_isbn(isbn TEXT);
+
+-- Ejecutamos la función
+SELECT * FROM suma_venta_isbn('978-3-16-148410-0');
+SELECT * FROM suma_venta_isbn('978-0-452-28423-4');
+
+
 
 -- Crear una función para obtener el número de ventas por clientes
 -- (es decir, cuántas compras hizo)
+
+-- Lo que quiero que haga la función es lo siguiente, solo falta encapsularlo en una función
+SELECT cliente, COUNT(*) AS numero_compras_cliente FROM ventas GROUP BY cliente ORDER BY numero_compras_cliente DESC;
+
+-- Función
+CREATE OR REPLACE FUNCTION numero_compras_cliente(cliente_name TEXT)
+RETURNS INT AS
+$$
+DECLARE 
+	suma_compras_cliente INT;
+BEGIN 
+	SELECT COUNT(*) INTO suma_compras_cliente FROM ventas WHERE cliente = cliente_name;
+RETURN suma_compras_cliente;
+END
+$$
+LANGUAGE 'plpgsql';
+
+-- Muestra la tabla ventas
+SELECT * FROM ventas;
+
+-- Ejecutamos la función
+SELECT * FROM numero_compras_cliente('Rocky Balboa');
+
 
 
 -- Crear una función para obtener los libros vendidos en un rango de fechas
@@ -175,7 +244,7 @@ WHERE ventas.fecha_de_venta BETWEEN '2023-05-02' AND '2023-05-04';
 
 -- Ahora creamos la función
 CREATE OR REPLACE FUNCTION libros_vendidos_rango(fecha_inicio date, fecha_final date)
-RETURNS TABLE (isbn text, titulo text, fecha_de_venta date, cliente text, precio_de_venta numeric) AS 
+RETURNS TABLE (isbn text, titulo text, fecha_de_venta date, cliente text, precio_de_venta numeric) AS
 $$
 BEGIN
 RETURN QUERY
@@ -189,6 +258,7 @@ LANGUAGE 'plpgsql';
 
 -- Ejecutamos la función
 SELECT * FROM libros_vendidos_rango('2023-05-01', '2023-05-02');
+
 
 -- Creamos una tabla con las fechas filtradas
 CREATE TABLE fechas_filtradas AS SELECT * FROM libros_vendidos_rango('2023-05-01', '2023-05-02');
