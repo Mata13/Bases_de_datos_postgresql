@@ -98,7 +98,7 @@ SELECT COUNT(*) FROM covid_confirmado;
 
 -- Como no tenemos como tal una columna
 -- que nos diga si el paciente murió pero tenemos
--- la clumna fecha_def. Si murió se coloca una fecha,
+-- la columna fecha_def. Si murió se coloca una fecha,
 -- si no murió se pone 9999-99-99.
 -- De esa manera podemos obtener el número
 -- de fallecidos.
@@ -152,4 +152,133 @@ SELECT fecha_sintomas AS fecha, COUNT(*) AS total FROM covid_conf_ent
 	ORDER BY total DESC;
 
 -- Con lo anterior vemos que la fecha fue el 01/08/2021 y fueron 114.
--- Min sesion 17 - 57:00
+
+
+-- Cuáles fueron las 3 entidades que más contagios aportaron en dicha fecha?
+
+-- Creamos una tabla auxiliar con los registros que tienen la fecha
+-- donde hubo la mayor cantidad de contagios,
+-- que fue el 01/08/2021 y fueron 114.
+CREATE TABLE covid_conf_ent_fecha_max AS
+	SELECT * FROM covid_conf_ent WHERE fecha_sintomas = '01/08/2021';
+
+-- Muestra la nueva tabla
+SELECT * FROM covid_conf_ent_fecha_max;
+
+-- Filtramos los estados con mayor cantidad de contagios
+SELECT entidad_federativa, COUNT(*) AS total
+FROM covid_conf_ent_fecha_max
+GROUP BY entidad_federativa
+ORDER BY total DESC
+LIMIT 3;
+
+
+-- Qué porcentaje representó cada una de esas entidades respecto
+-- del total de contagios de dicha fecha?
+SELECT (15 * 100)/114.0 AS porcentaje_DF, 
+	(11 * 100)/114.0 AS porcentaje_EDOMEX,
+	(10 * 100)/114.0 AS porcentaje_NL;
+
+
+-- En qué fecha se dió la mayor cantidad de muertes?
+SELECT * FROM covid_conf_ent WHERE fecha_def != '9999-99-99';
+
+SELECT fecha_def, COUNT(*) AS total
+FROM covid_conf_ent
+WHERE fecha_def != '9999-99-99'
+GROUP BY fecha_def
+ORDER BY total DESC;
+
+
+
+
+-------------------------------------
+------ Condición de intubación ------
+-------------------------------------
+
+-- De esta tabla solo nos interesa los
+-- valores de 1 = SI, 2 = NO.
+-- Se muestran los valores y definiciones
+-- en el Catalogo_SI_NO.
+
+-- Calcular de cuántos se conoce la condición
+-- si fueron o no entubados.
+CREATE TABLE covid_conf_int AS SELECT * FROM covid_confirmado WHERE intubado IN (1, 2);
+
+-- Muestra las filas de la tabla que cumplen la condición de intubación
+SELECT COUNT(*) FROM covid_conf_int;
+
+
+-- Calcular total de intubados y el porcentaje
+-- respecto de condición de intubación.
+SELECT * FROM covid_conf_int WHERE intubado = 1; -- 305 intubados
+
+-- Porcentaje que cumple la condición
+SELECT 305 * 100/2483.0; -- 12.28%
+
+
+-- Calcular total de muertes con condición de intubación conocida
+SELECT COUNT(*) FROM covid_conf_int 
+	WHERE fecha_def != '9999-99-99'; -- 1141
+
+
+-- Calcular qué porcentaje de las muertes requirió intubación
+SELECT COUNT(*) FROM covid_conf_int 
+	WHERE fecha_def != '9999-99-99' 
+	AND intubado = 1; -- 254
+
+SELECT (254 * 100)/1141.0 AS porcentaje_de_muertes; -- 22.26%
+
+
+-- P(Morir e intubarse / morir) = P(intubarse | falleció)
+-- Por Teorema de Bayes: P(A|B) = P(B|A) P(A) / P(B)
+-- Entonces 
+-- P(morir e intubarse |morir) = P(intubarse|muerte) * P(morir) / P(intubarse)
+-- = (0.226 * 0.07)/0.12
+-- Por lo que pa probabilidad de fallecer dado que te intubaron
+SELECT (0.226 * 0.07)/0.12; -- 0.0131
+-- Por lo tantro, 13 de cada 100 que requirieron intubarse fallecieron.
+
+
+
+
+------------------------------------------
+-- Distribución porcentual de contagios --
+------------------------------------------
+
+-- Mostrar, del total de contagios, 
+-- la tabla de Pareto respecto de las entidades
+CREATE TABLE contagio_por_entidad AS
+	SELECT entidad_federativa, COUNT(*) AS total
+	FROM covid_conf_ent
+	GROUP BY entidad_federativa
+	ORDER BY total DESC;
+
+-- Muestra la nueva tabla creada
+SELECT * FROM contagio_por_entidad;
+
+-- Muestra el total de contagios
+SELECT SUM(total) FROM contagio_por_entidad; -- 16463
+
+-- La tabla de pareto es cuando tienes los datos,
+-- los ordenas del mayor al menor
+-- y después te preguntas qué porcentaje
+-- van representando los acumulados.
+-- Al sumar todos debes obtener el 100%.
+
+SELECT 100/16463.0;
+
+SELECT entidad_federativa, total,
+	0.0060*SUM(total) OVER(ORDER BY total DESC)
+	AS cumsum_total
+FROM contagio_por_entidad;
+
+-- Lo que nos dice la tabla acumulada es que
+-- de las 32 entidades, las 5 con más contagios
+-- cubren la mitad de los contagios del país.
+-- Es decir, las primeras 5 entidades son las 
+-- causas de la mitad de los contagios del país.
+-- En el país hay 130 millones de personas,
+-- con que se hubieran atendido esas primeras 5
+-- entidades te hubieras librado la mitad de los
+-- contagios a nivel nacional.
